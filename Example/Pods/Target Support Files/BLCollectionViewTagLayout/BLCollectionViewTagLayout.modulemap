@@ -1,0 +1,6 @@
+framework module BLCollectionViewTagLayout {
+  umbrella header "BLCollectionViewTagLayout-umbrella.h"
+
+  export *
+  module * { export * }
+}
