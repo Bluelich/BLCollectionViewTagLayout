@@ -8,6 +8,6 @@
 
 @import UIKit;
 
-@interface BLViewController : UIViewController
+@interface BLViewController : UICollectionViewController
 
 @end
