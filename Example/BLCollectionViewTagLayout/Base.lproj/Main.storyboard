@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Title-->
         <scene sceneID="cog-Wt-WEy">
             <objects>
                 <collectionViewController id="Svu-6j-u4A" customClass="BLViewController" sceneMemberID="viewController">
@@ -19,45 +19,61 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <collectionViewLayout key="collectionViewLayout" id="VmD-ZO-9JT" customClass="BLCollectionViewTagLayout">
                             <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="size" keyPath="itemSize">
-                                    <size key="value" width="100" height="100"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="number" keyPath="sectionTop">
-                                    <real key="value" value="10"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="number" keyPath="sectionLeft">
-                                    <real key="value" value="10"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="number" keyPath="sectionBottom">
-                                    <real key="value" value="10"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="number" keyPath="sectionRight">
-                                    <real key="value" value="10"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="number" keyPath="lineSpacing">
-                                    <real key="value" value="10"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="number" keyPath="itemSpacing">
-                                    <real key="value" value="10"/>
-                                </userDefinedRuntimeAttribute>
                                 <userDefinedRuntimeAttribute type="size" keyPath="headerSize">
-                                    <size key="value" width="0.0" height="44"/>
+                                    <size key="value" width="0.0" height="50"/>
                                 </userDefinedRuntimeAttribute>
                                 <userDefinedRuntimeAttribute type="size" keyPath="footerSize">
-                                    <size key="value" width="0.0" height="44"/>
+                                    <size key="value" width="0.0" height="50"/>
                                 </userDefinedRuntimeAttribute>
                                 <userDefinedRuntimeAttribute type="boolean" keyPath="pinHeaders" value="YES"/>
                                 <userDefinedRuntimeAttribute type="boolean" keyPath="pinFooters" value="YES"/>
+                                <userDefinedRuntimeAttribute type="number" keyPath="sectionTop">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="sectionLeft">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="sectionBottom">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="sectionRight">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="lineSpacing">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="itemSpacing">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="size" keyPath="itemSize">
+                                    <size key="value" width="60" height="60"/>
+                                </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                         </collectionViewLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="xns-wY-ASO">
-                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="UICollectionViewCell" id="xns-wY-ASO">
+                                <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="maH-KS-9qg">
+                                            <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </view>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="maH-KS-9qg" firstAttribute="top" secondItem="xns-wY-ASO" secondAttribute="top" id="4Ua-rI-qOv"/>
+                                    <constraint firstAttribute="bottom" secondItem="maH-KS-9qg" secondAttribute="bottom" id="6c7-ap-ee4"/>
+                                    <constraint firstAttribute="trailing" secondItem="maH-KS-9qg" secondAttribute="trailing" id="Vje-n4-ccr"/>
+                                    <constraint firstItem="maH-KS-9qg" firstAttribute="leading" secondItem="xns-wY-ASO" secondAttribute="leading" id="ZCo-DL-Wgl"/>
+                                </constraints>
+                                <size key="customSize" width="80" height="80"/>
                             </collectionViewCell>
                         </cells>
                         <connections>
@@ -65,17 +81,31 @@
                             <outlet property="delegate" destination="Svu-6j-u4A" id="l7N-vb-PuP"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" id="gJ6-Qm-6rx"/>
+                    <navigationItem key="navigationItem" title="Title" prompt="Prompt" id="gJ6-Qm-6rx">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="uAH-CT-Med"/>
+                        <rightBarButtonItems>
+                            <barButtonItem title="UnPin" style="done" id="xmZ-cR-fJs">
+                                <connections>
+                                    <action selector="unPin:" destination="Svu-6j-u4A" id="sA6-yj-Bpf"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Pin" style="done" id="AXX-PZ-KD6">
+                                <connections>
+                                    <action selector="pin:" destination="Svu-6j-u4A" id="zOz-KK-3fB"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ysT-Q3-KCQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2106.4000000000001" y="369.26536731634184"/>
+            <point key="canvasLocation" x="2126" y="369"/>
         </scene>
-        <!--Item-->
+        <!--Nav Title and Prompt-->
         <scene sceneID="dBQ-WO-krA">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="GSV-sP-0ER" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="QiU-m8-9vh"/>
+                    <tabBarItem key="tabBarItem" title="Nav Title and Prompt" badgeValue="1" id="QiU-m8-9vh"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="jIV-2O-4yO">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
@@ -95,17 +125,224 @@
             <objects>
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="VsR-TD-99f" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="8Lz-20-UQQ">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" itemPositioning="centered" id="8Lz-20-UQQ">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
                         <segue destination="GSV-sP-0ER" kind="relationship" relationship="viewControllers" id="XEu-Ys-1pW"/>
+                        <segue destination="jlz-Wa-ROA" kind="relationship" relationship="viewControllers" id="mB5-3Z-4T4"/>
+                        <segue destination="vtw-MI-D7U" kind="relationship" relationship="viewControllers" id="aAY-wE-YF1"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jAv-wg-btv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="228" y="369.26536731634184"/>
+            <point key="canvasLocation" x="111" y="1149"/>
+        </scene>
+        <!--Title-->
+        <scene sceneID="K0Q-ZW-6jd">
+            <objects>
+                <collectionViewController id="AHd-7e-9t4" customClass="BLViewController" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="9mf-dS-Nqj">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <collectionViewLayout key="collectionViewLayout" id="p1G-yg-PaE" customClass="BLCollectionViewTagLayout">
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="size" keyPath="headerSize">
+                                    <size key="value" width="0.0" height="50"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="size" keyPath="footerSize">
+                                    <size key="value" width="0.0" height="50"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="pinHeaders" value="YES"/>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="pinFooters" value="YES"/>
+                                <userDefinedRuntimeAttribute type="number" keyPath="sectionTop">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="sectionLeft">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="sectionBottom">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="sectionRight">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="lineSpacing">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="itemSpacing">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="size" keyPath="itemSize">
+                                    <size key="value" width="60" height="60"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </collectionViewLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="UICollectionViewCell" id="ZHl-1W-03M">
+                                <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                    <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iXB-Uw-wFS">
+                                            <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </view>
+                                <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="iXB-Uw-wFS" secondAttribute="trailing" id="OZ0-PG-sdX"/>
+                                    <constraint firstItem="iXB-Uw-wFS" firstAttribute="leading" secondItem="ZHl-1W-03M" secondAttribute="leading" id="Z4K-vd-1aA"/>
+                                    <constraint firstItem="iXB-Uw-wFS" firstAttribute="top" secondItem="ZHl-1W-03M" secondAttribute="top" id="Zy6-Hl-qZY"/>
+                                    <constraint firstAttribute="bottom" secondItem="iXB-Uw-wFS" secondAttribute="bottom" id="m0G-xp-1KV"/>
+                                </constraints>
+                                <size key="customSize" width="80" height="80"/>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="AHd-7e-9t4" id="ttv-Z8-wGT"/>
+                            <outlet property="delegate" destination="AHd-7e-9t4" id="o0R-GO-FpM"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" title="Title" id="AvN-EJ-Pj9">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="2fe-FI-J2B"/>
+                        <rightBarButtonItems>
+                            <barButtonItem title="UnPin" style="done" id="nTY-MX-fgg">
+                                <connections>
+                                    <action selector="unPin:" destination="AHd-7e-9t4" id="3qN-DF-VuY"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Pin" style="done" id="iX7-J4-kut">
+                                <connections>
+                                    <action selector="pin:" destination="AHd-7e-9t4" id="4Ay-QC-GsE"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aRb-Pv-W6B" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2126" y="1149"/>
+        </scene>
+        <!--Nav Title-->
+        <scene sceneID="RHT-tF-oG9">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="jlz-Wa-ROA" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Nav Title" badgeValue="2" id="2cl-Qy-v5G"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="OvA-6W-Np1">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="AHd-7e-9t4" kind="relationship" relationship="rootViewController" id="Gu6-qF-e61"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lde-wj-rdR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1167" y="1150"/>
+        </scene>
+        <!--Title-->
+        <scene sceneID="w2u-IG-5Hn">
+            <objects>
+                <collectionViewController id="vtw-MI-D7U" customClass="BLViewController" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="VNk-tM-1Aj">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <collectionViewLayout key="collectionViewLayout" id="HbD-2O-gVX" customClass="BLCollectionViewTagLayout">
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="size" keyPath="headerSize">
+                                    <size key="value" width="0.0" height="50"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="size" keyPath="footerSize">
+                                    <size key="value" width="0.0" height="50"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="pinHeaders" value="YES"/>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="pinFooters" value="YES"/>
+                                <userDefinedRuntimeAttribute type="number" keyPath="sectionTop">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="sectionLeft">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="sectionBottom">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="sectionRight">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="lineSpacing">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="itemSpacing">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="size" keyPath="itemSize">
+                                    <size key="value" width="60" height="60"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </collectionViewLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="UICollectionViewCell" id="sai-pm-jYO">
+                                <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                    <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0mA-px-0Hq">
+                                            <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </view>
+                                <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="0mA-px-0Hq" firstAttribute="leading" secondItem="sai-pm-jYO" secondAttribute="leading" id="D88-V4-qM9"/>
+                                    <constraint firstItem="0mA-px-0Hq" firstAttribute="top" secondItem="sai-pm-jYO" secondAttribute="top" id="HPP-do-bn5"/>
+                                    <constraint firstAttribute="trailing" secondItem="0mA-px-0Hq" secondAttribute="trailing" id="Lei-DG-snz"/>
+                                    <constraint firstAttribute="bottom" secondItem="0mA-px-0Hq" secondAttribute="bottom" id="lr5-5Z-a6X"/>
+                                </constraints>
+                                <size key="customSize" width="80" height="80"/>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="vtw-MI-D7U" id="Ejr-jh-hYC"/>
+                            <outlet property="delegate" destination="vtw-MI-D7U" id="aNn-cm-sNw"/>
+                        </connections>
+                    </collectionView>
+                    <tabBarItem key="tabBarItem" title="Normal" badgeValue="3" id="ECw-WO-w30"/>
+                    <navigationItem key="navigationItem" title="Title" prompt="Prompt" id="RwC-EY-GeG">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="VIt-w7-e6z"/>
+                        <rightBarButtonItems>
+                            <barButtonItem title="UnPin" style="done" id="2fG-ND-iIH">
+                                <connections>
+                                    <action selector="unPin:" destination="vtw-MI-D7U" id="S5F-s9-0W6"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Pin" style="done" id="Xfz-Ne-OFo">
+                                <connections>
+                                    <action selector="pin:" destination="vtw-MI-D7U" id="R48-23-Vjl"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yTi-eL-6bj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1167" y="1917"/>
         </scene>
     </scenes>
 </document>

@@ -309,6 +309,7 @@
         [self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter
                                              atIndexPath:header.indexPath];
         frame.origin.y = MIN(frame.origin.y, CGRectGetMinY(footer.frame) - CGRectGetHeight(header.frame));
+        frame.origin.y = MAX(0, frame.origin.y);
         header.frame = frame;
     }
     if(sectionFootersShouldPinToVisibleBounds){
