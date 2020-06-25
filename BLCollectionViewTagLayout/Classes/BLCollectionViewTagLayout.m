@@ -17,6 +17,30 @@
                                      items:(NSArray<UICollectionViewLayoutAttributes *> *)items
                                     footer:(UICollectionViewLayoutAttributes *)footer;
 @end
+#pragma mark - UICollectionViewTagStyleLayoutSectionAttributes Implementation
+#pragma mark -
+@implementation UICollectionViewTagStyleLayoutSectionAttributes
++ (instancetype)layoutAttributesWithHeader:(UICollectionViewLayoutAttributes *)header
+                                     items:(NSArray<UICollectionViewLayoutAttributes *> *)items
+                                    footer:(UICollectionViewLayoutAttributes *)footer
+{
+    UICollectionViewTagStyleLayoutSectionAttributes *obj =
+    UICollectionViewTagStyleLayoutSectionAttributes.new;
+    obj.header = header;
+    obj.items  = items;
+    obj.footer = footer;
+    return obj;
+}
+- (id)copyWithZone:(NSZone *)zone
+{
+    UICollectionViewTagStyleLayoutSectionAttributes *obj =
+    UICollectionViewTagStyleLayoutSectionAttributes.new;
+    obj.header = self.header.copy;
+    obj.items  = [[NSArray alloc] initWithArray:self.items copyItems:YES];
+    obj.footer = self.footer.copy;
+    return obj;
+}
+@end
 
 #pragma mark - UICollectionViewTagStyleLayoutSectionItemSorter Declare
 #pragma mark -
@@ -26,6 +50,110 @@
                                            boundingRect:(CGRect )boundingRect
                                      minimumLineSpacing:(CGFloat)minimumLineSpacing
                                 minimumInteritemSpacing:(CGFloat)minimumInteritemSpacing;
+@end
+
+#pragma mark - UICollectionViewTagStyleLayoutSectionItemSorter Implementation
+#pragma mark -
+@implementation UICollectionViewTagStyleLayoutSectionItemSorter
+
++ (NSArray<UICollectionViewLayoutAttributes *> *)sorted:(NSArray<UICollectionViewLayoutAttributes *> *)attributes
+                                            usingPolicy:(BLCollectionViewTagLayoutItemRenderPolicy)policy
+                                           boundingRect:(CGRect )boundingRect
+                                     minimumLineSpacing:(CGFloat)minimumLineSpacing
+                                minimumInteritemSpacing:(CGFloat)minimumInteritemSpacing
+{
+    switch (policy) {
+        case BLCollectionViewTagLayoutItemRenderDefault:
+        case BLCollectionViewTagLayoutItemRenderShortestFirst:
+            return [self sortedAttributesWithPolicy:policy
+                                         attributes:attributes
+                                       boundingRect:boundingRect
+                                 minimumLineSpacing:minimumLineSpacing
+                            minimumInteritemSpacing:minimumInteritemSpacing];
+        case BLCollectionViewTagLayoutItemRenderFullFill:
+            return [self sortedForFullFill:attributes
+                              boundingRect:boundingRect
+                        minimumLineSpacing:minimumLineSpacing
+                   minimumInteritemSpacing:minimumInteritemSpacing];
+        case BLCollectionViewTagLayoutItemRenderCustom:
+            return nil;
+    }
+}
++ (NSArray *)sortedAttributesWithPolicy:(BLCollectionViewTagLayoutItemRenderPolicy)policy
+                             attributes:(NSArray<UICollectionViewLayoutAttributes *> *)attributes
+                           boundingRect:(CGRect )boundingRect
+                     minimumLineSpacing:(CGFloat)minimumLineSpacing
+                minimumInteritemSpacing:(CGFloat)minimumInteritemSpacing
+{
+    NSParameterAssert(policy == BLCollectionViewTagLayoutItemRenderDefault ||
+                      policy == BLCollectionViewTagLayoutItemRenderShortestFirst);
+    NSMutableArray<UICollectionViewLayoutAttributes *> *attributesForItems = @[].mutableCopy;
+    NSMutableArray<UICollectionViewLayoutAttributes *> *rightmostItems = @[].mutableCopy;
+    [attributes enumerateObjectsUsingBlock:^(UICollectionViewLayoutAttributes *obj, NSUInteger idx, BOOL *stop) {
+        CGPoint itemOrigin = CGPointZero;
+        obj.frame = (CGRect){
+            .origin = obj.frame.origin,
+            .size = {
+                .width = MIN(obj.size.width, CGRectGetWidth(boundingRect)),
+                .height = obj.size.height
+            }
+        };
+        
+        if (idx == 0) {
+            itemOrigin = boundingRect.origin;
+        }else{
+            UICollectionViewLayoutAttributes *rightmostItem = nil;
+            for (UICollectionViewLayoutAttributes *obj in rightmostItems) {
+                if (CGRectGetMaxX(obj.frame) + minimumInteritemSpacing + CGRectGetWidth(obj.frame)
+                    > CGRectGetWidth(boundingRect)) continue;//cannot place the new item here
+                rightmostItem = obj;
+                break;
+            }
+            if (rightmostItem) {
+                //place the item here
+                itemOrigin = CGPointMake(CGRectGetMaxX(rightmostItem.frame) + minimumInteritemSpacing, CGRectGetMinY(rightmostItem.frame));
+                //update the rightmost item of this line
+                [rightmostItems removeObject:rightmostItem];
+            }else{
+                //start on a new line
+                itemOrigin = CGPointMake(CGRectGetMinX(boundingRect), CGRectGetMaxY(attributesForItems.lastObject.frame) + minimumLineSpacing);
+                //beyond the max rect of the limit size
+                if (itemOrigin.y + CGRectGetHeight(obj.frame) > CGRectGetMaxY(boundingRect)) {
+                    return (void)(*stop = YES);
+                }
+            }
+        }
+        obj.frame = (CGRect){
+            .origin = itemOrigin,
+            .size   = {
+                .width  = MIN(CGRectGetWidth(obj.frame), CGRectGetWidth(boundingRect)),
+                .height = CGRectGetHeight(obj.frame)
+            }
+        };
+        /*
+         Default       ：Only keep the last item alaways
+         ShortestFirst : Keep last items of every lines
+         */
+        if (policy == BLCollectionViewTagLayoutItemRenderDefault) {
+            [rightmostItems removeAllObjects];
+        }
+        [rightmostItems addObject:obj];
+        [attributesForItems addObject:obj];
+    }];
+    return attributesForItems.copy;
+}
++ (NSArray *)sortedForFullFill:(NSArray<UICollectionViewLayoutAttributes *> *)attributes
+                  boundingRect:(CGRect )boundingRect
+            minimumLineSpacing:(CGFloat)minimumLineSpacing
+       minimumInteritemSpacing:(CGFloat)minimumInteritemSpacing
+{
+    //sort by items width
+    NSArray<UICollectionViewLayoutAttributes *> *attributesForItems = [attributes sortedArrayUsingComparator:^NSComparisonResult(UICollectionViewLayoutAttributes *obj1, UICollectionViewLayoutAttributes *obj2) {
+        return CGRectGetWidth(obj1.frame) < CGRectGetWidth(obj2.frame);
+    }];
+    attributesForItems = nil;
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Not a valid implementation, unfinished" userInfo:nil];
+}
 @end
 
 #pragma mark - UICollectionViewTagStyleLayout
@@ -77,6 +205,7 @@
     _itemSize                = CGSizeMake(50, 50);
     _minimumLineSpacing      = 10;
     _minimumInteritemSpacing = 10;
+    _maximumSectionHeight    = CGFLOAT_MAX;
     _headerReferenceSize     = CGSizeZero;
     _footerReferenceSize     = CGSizeZero;
     _sectionInset            = UIEdgeInsetsZero;
@@ -175,7 +304,7 @@
             [layoutAttributes addObject:obj.header];
         }
         for (UICollectionViewLayoutAttributes *item in obj.items) {
-            if (CGRectIntersectsRect(rect, item.frame)) {
+            if (CGRectIntersectsRect(rect, item.frame) && item.frame.size.height > 0) {
                 [layoutAttributes addObject:item];
             }
         }
@@ -229,37 +358,49 @@
         attributesForHeader.frame = CGRectMake(0, maxY, maxContentWidth, headerReferenceSize.height);
         attributesForHeader.zIndex = self.zIndexForHeaderFooter;
         
-        //items
-        NSMutableArray<UICollectionViewLayoutAttributes *> *attributesForItems = @[].mutableCopy;
-        for (NSInteger item = 0; item < [self.collectionView numberOfItemsInSection:section]; item++) {
-            NSIndexPath *indexPathForItem = [NSIndexPath indexPathForItem:item inSection:section];
-            CGSize itemSize = self.itemSize;
-            if ([self.delegate respondsToSelector:@selector(collectionView:layout:sizeForItemAtIndexPath:)]) {
-                itemSize.width = [self.delegate collectionView:self.collectionView layout:self sizeForItemAtIndexPath:indexPathForItem].width;
-            }
-            UICollectionViewLayoutAttributes *attributesForItem = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPathForItem];
-            attributesForItem.size = itemSize;
-            [attributesForItems addObject:attributesForItem];
+        CGFloat maximumSectionHeight = self.maximumSectionHeight;
+        if ([self.delegate respondsToSelector:@selector(collectionView:layout:maximumHeightForSection:)]) {
+            maximumSectionHeight = [self.delegate collectionView:self.collectionView layout:self maximumHeightForSection:section];
         }
-        CGRect boundingRect = (CGRect){
-            .origin = (CGPoint){
+        CGRect boundingRectForItems = (CGRect){
+            .origin = {
                 .x = sectionInset.left,
                 .y = CGRectGetMaxY(attributesForHeader.frame) + sectionInset.top
             },
-            .size = (CGSize){
+            .size = {
                 .width = maxContentWidth - sectionInset.left - sectionInset.right,
-                .height = CGFLOAT_MAX
+                .height = maximumSectionHeight
             }
         };
-        NSArray *sortedAttributesForItems =
-        [UICollectionViewTagStyleLayoutSectionItemSorter sorted:attributesForItems
-                                                    usingPolicy:_itemRenderPolicy
-                                                   boundingRect:boundingRect
-                                             minimumLineSpacing:minimumLineSpacing
-                                        minimumInteritemSpacing:minimumInteritemSpacing];
+        NSArray<UICollectionViewLayoutAttributes *> *sortedAttributesForItems = nil;
+        if (_itemRenderPolicy == BLCollectionViewTagLayoutItemRenderCustom) {
+            NSAssert([self.delegate respondsToSelector:@selector(collectionView:layout:attributesInSection:boundingRect:)], @"You must implement `-[BLCollectionViewDelegateTagStyleLayout collectionView:layout:attributesInSection:boundingRect:]` if you prefer a custom layout item render policy");
+            sortedAttributesForItems = [self.delegate collectionView:self.collectionView layout:self attributesInSection:section boundingRect:boundingRectForItems];
+        }else{
+            //items
+            NSMutableArray<UICollectionViewLayoutAttributes *> *attributesForItems = @[].mutableCopy;
+            for (NSInteger item = 0; item < [self.collectionView numberOfItemsInSection:section]; item++) {
+                NSIndexPath *indexPathForItem = [NSIndexPath indexPathForItem:item inSection:section];
+                CGSize itemSize = self.itemSize;
+                if ([self.delegate respondsToSelector:@selector(collectionView:layout:sizeForItemAtIndexPath:)]) {
+                    itemSize = [self.delegate collectionView:self.collectionView layout:self sizeForItemAtIndexPath:indexPathForItem];
+                }
+                itemSize.width = MIN(itemSize.width, CGRectGetWidth(boundingRectForItems));
+                UICollectionViewLayoutAttributes *attributesForItem = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPathForItem];
+                attributesForItem.size = itemSize;
+                [attributesForItems addObject:attributesForItem];
+            }
+            sortedAttributesForItems =
+            [UICollectionViewTagStyleLayoutSectionItemSorter sorted:attributesForItems
+                                                        usingPolicy:_itemRenderPolicy
+                                                       boundingRect:boundingRectForItems
+                                                 minimumLineSpacing:minimumLineSpacing
+                                            minimumInteritemSpacing:minimumInteritemSpacing];
+        }
+        
         //section footer
-        if (attributesForItems.count > 0) {
-            maxY = CGRectGetMaxY(attributesForItems.lastObject.frame) + sectionInset.bottom;
+        if (sortedAttributesForItems.count > 0) {
+            maxY = CGRectGetMaxY(sortedAttributesForItems.lastObject.frame) + sectionInset.bottom;
         }else{
             maxY = CGRectGetMaxY(attributesForHeader.frame);
         }
@@ -297,6 +438,10 @@
     visibleRectForPinHeaderFooter.size.height -= bottomOffset;
     // copy items
     self.sectionAttributes = [[NSMutableArray alloc] initWithArray:self.originSectionAttributes copyItems:YES];
+    if (self.collectionViewContentSize.height <= CGRectGetHeight(visibleRectForPinHeaderFooter)) {
+        //does no need to pin header or footer to visible bounds any more.
+        return;
+    }
     NSArray<UICollectionViewLayoutAttributes *> *attributes = [self layoutAttributesForElementsInRect:visibleRectForPinHeaderFooter sectionAttributes:self.originSectionAttributes];
     if (sectionHeadersShouldPinToVisibleBounds) {
         UICollectionViewLayoutAttributes *header =
@@ -342,12 +487,7 @@
         };
     }else{
         if (UIEdgeInsetsEqualToEdgeInsets(UIEdgeInsetsZero, self.systemAdditionalAdjustedContentInset)) {
-            self.additionalAdjustedContentInset = (UIEdgeInsets){
-                .top = self.collectionView.scrollIndicatorInsets.top,
-                .left = 0,
-                .bottom = self.collectionView.scrollIndicatorInsets.bottom,
-                .right = 0
-            };
+            self.additionalAdjustedContentInset = self.collectionView.scrollIndicatorInsets;
         }else{
             self.additionalAdjustedContentInset = self.systemAdditionalAdjustedContentInset;
         }
@@ -380,7 +520,9 @@
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section >= self.sectionAttributes.count) return nil;
-    return self.sectionAttributes[indexPath.section].items[indexPath.item];
+    NSArray<UICollectionViewLayoutAttributes *> *items = self.sectionAttributes[indexPath.section].items;
+    if (indexPath.item >= items.count) return nil;
+    return items[indexPath.item];
 }
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath
 {
@@ -451,7 +593,7 @@
                                                     tabbar:(UITabBar *)tabbar
 {
     self.systemAdditionalAdjustedContentInset = (UIEdgeInsets){
-        .top = navigationBar.isTranslucent ? CGRectGetHeight(statusBarFrame)  + CGRectGetHeight(navigationBar.frame): 0,
+        .top = navigationBar.isTranslucent ? CGRectGetHeight(statusBarFrame) + CGRectGetHeight(navigationBar.frame) : 0,
         .left = 0,
         .bottom = tabbar.isTranslucent ? CGRectGetHeight(tabbar.frame) : 0,
         .right = 0
@@ -459,134 +601,16 @@
 }
 @end
 
-#pragma mark - UICollectionViewTagStyleLayoutSectionAttributes Implementation
-#pragma mark -
-@implementation UICollectionViewTagStyleLayoutSectionAttributes
-+ (instancetype)layoutAttributesWithHeader:(UICollectionViewLayoutAttributes *)header
-                                     items:(NSArray<UICollectionViewLayoutAttributes *> *)items
-                                    footer:(UICollectionViewLayoutAttributes *)footer
-{
-    UICollectionViewTagStyleLayoutSectionAttributes *obj = [UICollectionViewTagStyleLayoutSectionAttributes new];
-    obj.header = header;
-    obj.items  = items;
-    obj.footer = footer;
-    return obj;
-}
-- (id)copyWithZone:(NSZone *)zone
-{
-    UICollectionViewTagStyleLayoutSectionAttributes *obj = [UICollectionViewTagStyleLayoutSectionAttributes new];
-    obj.header = self.header.copy;
-    obj.items  = [[NSArray alloc] initWithArray:self.items copyItems:YES];
-    obj.footer = self.footer.copy;
-    return obj;
-}
-@end
-
-#pragma mark - UICollectionViewTagStyleLayoutSectionItemSorter Implementation
-#pragma mark -
-@implementation UICollectionViewTagStyleLayoutSectionItemSorter
-
-+ (NSArray<UICollectionViewLayoutAttributes *> *)sorted:(NSArray<UICollectionViewLayoutAttributes *> *)attributes
-                                            usingPolicy:(BLCollectionViewTagLayoutItemRenderPolicy)policy
-                                           boundingRect:(CGRect )boundingRect
-                                     minimumLineSpacing:(CGFloat)minimumLineSpacing
-                                minimumInteritemSpacing:(CGFloat)minimumInteritemSpacing
-{
-    switch (policy) {
-        case BLCollectionViewTagLayoutItemRenderDefault:
-        case BLCollectionViewTagLayoutItemRenderShortestFirst:
-            return [self sortedAttributesWithPolicy:policy
-                                         attributes:attributes
-                                       boundingRect:boundingRect
-                                 minimumLineSpacing:minimumLineSpacing
-                            minimumInteritemSpacing:minimumInteritemSpacing];
-        case BLCollectionViewTagLayoutItemRenderFullFill:
-            return [self sortedForFullFill:attributes
-                              boundingRect:boundingRect
-                        minimumLineSpacing:minimumLineSpacing
-                   minimumInteritemSpacing:minimumInteritemSpacing];
-    }
-}
-+ (NSArray *)sortedAttributesWithPolicy:(BLCollectionViewTagLayoutItemRenderPolicy)policy
-                             attributes:(NSArray<UICollectionViewLayoutAttributes *> *)attributes
-                           boundingRect:(CGRect )boundingRect
-                     minimumLineSpacing:(CGFloat)minimumLineSpacing
-                minimumInteritemSpacing:(CGFloat)minimumInteritemSpacing
-{
-    NSParameterAssert(policy == BLCollectionViewTagLayoutItemRenderDefault ||
-                      policy == BLCollectionViewTagLayoutItemRenderShortestFirst);
-    NSMutableArray<UICollectionViewLayoutAttributes *> *attributesForItems = @[].mutableCopy;
-    NSMutableArray<UICollectionViewLayoutAttributes *> *rightmostItems = @[].mutableCopy;
-    [attributes enumerateObjectsUsingBlock:^(UICollectionViewLayoutAttributes *obj, NSUInteger idx, BOOL *stop) {
-        CGPoint itemOrigin = CGPointZero;
-        CGSize size = obj.frame.size;
-        size.width = MIN(size.width, CGRectGetWidth(boundingRect));
-        obj.frame = (CGRect){
-            .origin = obj.frame.origin,
-            .size = size
-        };
-        
-        if (attributesForItems.count == 0) {
-            itemOrigin = boundingRect.origin;
-        }else{
-            UICollectionViewLayoutAttributes *rightmostItem = nil;
-            for (UICollectionViewLayoutAttributes *obj in rightmostItems) {
-                if (CGRectGetMaxX(obj.frame) + minimumInteritemSpacing + CGRectGetWidth(obj.frame) > CGRectGetWidth(boundingRect)) continue;//cannot place the new item here
-                rightmostItem = obj;
-                break;
-            }
-            if (rightmostItem) {
-                //place the item here
-                itemOrigin = CGPointMake(CGRectGetMaxX(rightmostItem.frame) + minimumInteritemSpacing, CGRectGetMinY(rightmostItem.frame));
-                //update the rightmost item of this line
-                [rightmostItems removeObject:rightmostItem];
-            }else{
-                //start from another line
-                itemOrigin = CGPointMake(CGRectGetMinX(boundingRect), CGRectGetMaxY(attributesForItems.lastObject.frame) + minimumLineSpacing);
-                //beyond the max rect of the limit size
-                if (itemOrigin.y + CGRectGetHeight(obj.frame) > CGRectGetMaxY(boundingRect)) return (void)(*stop = YES);
-            }
-        }
-        obj.frame = (CGRect){
-            .origin = itemOrigin,
-            .size   = (CGSize){
-                .width  = MIN(CGRectGetWidth(obj.frame), CGRectGetWidth(boundingRect)),
-                .height = CGRectGetHeight(obj.frame)
-            }
-        };
-        /*
-         Default       ：Only keep the last item alaways
-         ShortestFirst : Keep last items of every lines
-         */
-        if (policy == BLCollectionViewTagLayoutItemRenderDefault) [rightmostItems removeAllObjects];
-        [rightmostItems addObject:obj];
-        [attributesForItems addObject:obj];
-    }];
-    return attributesForItems.copy;
-}
-+ (NSArray *)sortedForFullFill:(NSArray<UICollectionViewLayoutAttributes *> *)attributes
-                  boundingRect:(CGRect )boundingRect
-            minimumLineSpacing:(CGFloat)minimumLineSpacing
-       minimumInteritemSpacing:(CGFloat)minimumInteritemSpacing
-{
-    //sort by items width
-    NSArray<UICollectionViewLayoutAttributes *> *attributesForItems = [attributes sortedArrayUsingComparator:^NSComparisonResult(UICollectionViewLayoutAttributes *obj1, UICollectionViewLayoutAttributes *obj2) {
-        return CGRectGetWidth(obj1.frame) < CGRectGetWidth(obj2.frame);
-    }];
-    attributesForItems = nil;
-    @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Not a valid implementation, unfinished" userInfo:nil];
-}
-@end
-
 #pragma mark - IBDESIGNABLE
 #pragma mark -
 @interface BLCollectionViewTagLayout (IBDESIGNABLE)
+@property (nonatomic) IBInspectable CGFloat   lineSpacing;
+@property (nonatomic) IBInspectable CGFloat   itemSpacing;
+@property (nonatomic) IBInspectable CGFloat   sectionHeight;
 @property (nonatomic) IBInspectable CGFloat   sectionTop;
 @property (nonatomic) IBInspectable CGFloat   sectionLeft;
 @property (nonatomic) IBInspectable CGFloat   sectionBottom;
 @property (nonatomic) IBInspectable CGFloat   sectionRight;
-@property (nonatomic) IBInspectable CGFloat   lineSpacing;
-@property (nonatomic) IBInspectable CGFloat   itemSpacing;
 @property (nonatomic) IBInspectable CGSize    headerSize;
 @property (nonatomic) IBInspectable CGSize    footerSize;
 @property (nonatomic) IBInspectable BOOL      pinHeaders;
@@ -650,6 +674,14 @@
 {
     return self.minimumInteritemSpacing;
 }
+- (void)setSectionHeight:(CGFloat)sectionHeight
+{
+    self.maximumSectionHeight = sectionHeight;
+}
+- (CGFloat)sectionHeight
+{
+    return self.maximumSectionHeight;
+}
 - (void)setHeaderSize:(CGSize)headerSize
 {
     self.headerReferenceSize = headerSize;
@@ -696,10 +728,10 @@
 #pragma mark - UIUpdateSupportHooks
 #pragma mark -
 @implementation BLCollectionViewTagLayout (UIUpdateSupportHooks)
-- (void)prepareForCollectionViewUpdates:(NSArray *)updateItems
+- (void)prepareForCollectionViewUpdates:(NSArray<UICollectionViewUpdateItem *> *)updateItems
 {
     /*
-     * bugfix: The app will crash when there are no items but supplmementary views in the section.
+     * bugfix: The app may crash when there are no items but supplmementary views in the section.
      */
     @try {
         [super prepareForCollectionViewUpdates:updateItems];

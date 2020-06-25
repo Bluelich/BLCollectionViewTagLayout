@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VsR-TD-99f">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VsR-TD-99f">
+    <device id="retina3_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -14,7 +12,7 @@
             <objects>
                 <collectionViewController id="Svu-6j-u4A" customClass="BLViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="0tE-vU-DvN">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <collectionViewLayout key="collectionViewLayout" id="VmD-ZO-9JT" customClass="BLCollectionViewTagLayout">
@@ -47,6 +45,9 @@
                                 </userDefinedRuntimeAttribute>
                                 <userDefinedRuntimeAttribute type="size" keyPath="itemSize">
                                     <size key="value" width="60" height="60"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="sectionHeight">
+                                    <real key="value" value="1000"/>
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                         </collectionViewLayout>
@@ -83,6 +84,23 @@
                     </collectionView>
                     <navigationItem key="navigationItem" title="Title" prompt="Prompt" id="gJ6-Qm-6rx">
                         <barButtonItem key="backBarButtonItem" title="Back" id="uAH-CT-Med"/>
+                        <leftBarButtonItems>
+                            <barButtonItem style="done" systemItem="add" id="Rxw-Qe-0Tc">
+                                <connections>
+                                    <action selector="add:" destination="Svu-6j-u4A" id="Rdb-f6-9k9"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="  - " style="done" id="M9O-jn-dIT">
+                                <connections>
+                                    <action selector="delete:" destination="Svu-6j-u4A" id="3pc-SL-bdM"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem style="done" systemItem="refresh" id="Kw8-aZ-3lW">
+                                <connections>
+                                    <action selector="refresh:" destination="Svu-6j-u4A" id="vha-V9-6Jz"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
                         <rightBarButtonItems>
                             <barButtonItem title="UnPin" style="done" id="xmZ-cR-fJs">
                                 <connections>
@@ -101,14 +119,14 @@
             </objects>
             <point key="canvasLocation" x="2126" y="369"/>
         </scene>
-        <!--Nav Title and Prompt-->
+        <!--Title and Prompt-->
         <scene sceneID="dBQ-WO-krA">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="GSV-sP-0ER" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Nav Title and Prompt" badgeValue="1" id="QiU-m8-9vh"/>
+                    <tabBarItem key="tabBarItem" title="Title and Prompt" image="1.square" catalog="system" id="QiU-m8-9vh"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="jIV-2O-4yO">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -145,7 +163,7 @@
             <objects>
                 <collectionViewController id="AHd-7e-9t4" customClass="BLViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="9mf-dS-Nqj">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <collectionViewLayout key="collectionViewLayout" id="p1G-yg-PaE" customClass="BLCollectionViewTagLayout">
@@ -214,15 +232,32 @@
                     </collectionView>
                     <navigationItem key="navigationItem" title="Title" id="AvN-EJ-Pj9">
                         <barButtonItem key="backBarButtonItem" title="Back" id="2fe-FI-J2B"/>
+                        <leftBarButtonItems>
+                            <barButtonItem style="done" systemItem="add" id="Vq9-AN-Qof">
+                                <connections>
+                                    <action selector="add:" destination="AHd-7e-9t4" id="Ujc-sB-wDZ"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="  - " style="done" id="KQO-yE-KK0">
+                                <connections>
+                                    <action selector="delete:" destination="AHd-7e-9t4" id="0z0-ZU-3IU"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem style="done" systemItem="refresh" id="WuC-rt-yay">
+                                <connections>
+                                    <action selector="refresh:" destination="AHd-7e-9t4" id="Izk-d4-A0g"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
                         <rightBarButtonItems>
                             <barButtonItem title="UnPin" style="done" id="nTY-MX-fgg">
                                 <connections>
-                                    <action selector="unPin:" destination="AHd-7e-9t4" id="3qN-DF-VuY"/>
+                                    <action selector="unPin:" destination="AHd-7e-9t4" id="YWg-ls-Dsr"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem title="Pin" style="done" id="iX7-J4-kut">
                                 <connections>
-                                    <action selector="pin:" destination="AHd-7e-9t4" id="4Ay-QC-GsE"/>
+                                    <action selector="pin:" destination="AHd-7e-9t4" id="3ty-9H-jbs"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -232,14 +267,14 @@
             </objects>
             <point key="canvasLocation" x="2126" y="1149"/>
         </scene>
-        <!--Nav Title-->
+        <!--Title-->
         <scene sceneID="RHT-tF-oG9">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="jlz-Wa-ROA" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Nav Title" badgeValue="2" id="2cl-Qy-v5G"/>
+                    <tabBarItem key="tabBarItem" title="Title" image="2.square" catalog="system" id="2cl-Qy-v5G"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="OvA-6W-Np1">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -256,7 +291,7 @@
             <objects>
                 <collectionViewController id="vtw-MI-D7U" customClass="BLViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="VNk-tM-1Aj">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <collectionViewLayout key="collectionViewLayout" id="HbD-2O-gVX" customClass="BLCollectionViewTagLayout">
@@ -323,7 +358,7 @@
                             <outlet property="delegate" destination="vtw-MI-D7U" id="aNn-cm-sNw"/>
                         </connections>
                     </collectionView>
-                    <tabBarItem key="tabBarItem" title="Normal" badgeValue="3" id="ECw-WO-w30"/>
+                    <tabBarItem key="tabBarItem" title="Normal" image="3.square" catalog="system" id="ECw-WO-w30"/>
                     <navigationItem key="navigationItem" title="Title" prompt="Prompt" id="RwC-EY-GeG">
                         <barButtonItem key="backBarButtonItem" title="Back" id="VIt-w7-e6z"/>
                         <rightBarButtonItems>
@@ -345,4 +380,9 @@
             <point key="canvasLocation" x="1167" y="1917"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="1.square" catalog="system" width="128" height="114"/>
+        <image name="2.square" catalog="system" width="128" height="114"/>
+        <image name="3.square" catalog="system" width="128" height="114"/>
+    </resources>
 </document>

@@ -13,6 +13,7 @@ typedef NS_ENUM (NSUInteger, BLCollectionViewTagLayoutItemRenderPolicy) {
     BLCollectionViewTagLayoutItemRenderDefault       = 0,//place section items one by one in order
     BLCollectionViewTagLayoutItemRenderShortestFirst = 1,//place item to shortest row each time
     BLCollectionViewTagLayoutItemRenderFullFill      = 2,//place item to full fill rows of each section, current unsupported
+    BLCollectionViewTagLayoutItemRenderCustom        = 3,//place item use custom algorithm
 };
 
 #pragma mark - UICollectionViewTagStyleLayout
@@ -41,9 +42,18 @@ IB_DESIGNABLE NS_CLASS_AVAILABLE_IOS(8_0)
 @property (nonatomic) CGSize footerReferenceSize;
 /*
  * The default edge insets are all set to 0.
- * It does not affect header footer，but for section items similar as UICollectionViewFlowLayout，
+ *
+ * It does not affect header footer，but for section items similar as UICollectionViewFlowLayout.
  */
 @property (nonatomic) UIEdgeInsets sectionInset;
+/*
+* The default value is CGFLOAT_MAX
+*
+* You can specify the value for section items height limitation.
+*
+* Note : This value is the height of the section elements,except the header footer and section inset.
+*/
+@property (nonatomic) CGFloat  maximumSectionHeight;
 /*
  * The default is UICollectionViewScrollDirectionVertical.
  *
@@ -71,7 +81,7 @@ IB_DESIGNABLE NS_CLASS_AVAILABLE_IOS(8_0)
  * As usual, you don't need to care about this,the layout will fill in it automatically.
  *
  * Before iOS 11, if you want to pin header or footer of sections to visible bounds,
- * and you need to modify the scrollIndicatorInsets of the collectionView, you need to set the
+ * and you want to modify the scrollIndicatorInsets of the collectionView, you need to set the
  * correct value on this property,otherwise it will cause abnormal sense during displaying.
  *
  * Note :
@@ -94,7 +104,6 @@ IB_DESIGNABLE NS_CLASS_AVAILABLE_IOS(8_0)
                                                     tabbar:(UITabBar *)tabbar;
 @end
 
-@class BLCollectionViewTagLayout;
 @protocol BLCollectionViewDelegateTagStyleLayout <UICollectionViewDelegate>
 
 @optional
@@ -103,9 +112,10 @@ IB_DESIGNABLE NS_CLASS_AVAILABLE_IOS(8_0)
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(BLCollectionViewTagLayout *)collectionViewLayout insetForSection:(NSInteger)section;
 - (CGFloat)collectionView:(UICollectionView *)collectionView      layout:(BLCollectionViewTagLayout *)collectionViewLayout minimumLineSpacingForSection:(NSInteger)section;
 - (CGFloat)collectionView:(UICollectionView *)collectionView      layout:(BLCollectionViewTagLayout *)collectionViewLayout minimumInteritemSpacingForSection:(NSInteger)section;
+- (CGFloat)collectionView:(UICollectionView *)collectionView      layout:(BLCollectionViewTagLayout *)collectionViewLayout maximumHeightForSection:(NSInteger)section;
 - (CGSize)collectionView:(UICollectionView *)collectionView       layout:(BLCollectionViewTagLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section;
 - (CGSize)collectionView:(UICollectionView *)collectionView       layout:(BLCollectionViewTagLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section;
-
+- (NSArray<UICollectionViewLayoutAttributes *> *)collectionView:(UICollectionView *)collectionView layout:(BLCollectionViewTagLayout *)collectionViewLayout attributesInSection:(NSInteger)section boundingRect:(CGRect )boundingRect;
 @end
 
 
