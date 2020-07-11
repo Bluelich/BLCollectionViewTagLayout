@@ -7,15 +7,19 @@
 
 #import "BLCollectionViewTagLayout.h"
 
+NSString *const BLCollectionElementKindSectionDecoration = @"BLCollectionElementKindSectionDecoration";
+
 #pragma mark - UICollectionViewTagStyleLayoutSectionAttributes Declare
 #pragma mark -
 @interface UICollectionViewTagStyleLayoutSectionAttributes : NSObject<NSCopying>
 @property (nonatomic,strong) UICollectionViewLayoutAttributes            *header;
 @property (nonatomic,strong) NSArray<UICollectionViewLayoutAttributes *> *items;
 @property (nonatomic,strong) UICollectionViewLayoutAttributes            *footer;
+@property (nonatomic,strong) UICollectionViewLayoutAttributes            *decoration;
 + (instancetype)layoutAttributesWithHeader:(UICollectionViewLayoutAttributes *)header
                                      items:(NSArray<UICollectionViewLayoutAttributes *> *)items
-                                    footer:(UICollectionViewLayoutAttributes *)footer;
+                                    footer:(UICollectionViewLayoutAttributes *)footer
+                                decoration:(UICollectionViewLayoutAttributes *)decoration;
 @end
 #pragma mark - UICollectionViewTagStyleLayoutSectionAttributes Implementation
 #pragma mark -
@@ -23,12 +27,14 @@
 + (instancetype)layoutAttributesWithHeader:(UICollectionViewLayoutAttributes *)header
                                      items:(NSArray<UICollectionViewLayoutAttributes *> *)items
                                     footer:(UICollectionViewLayoutAttributes *)footer
+                                decoration:(UICollectionViewLayoutAttributes *)decoration
 {
     UICollectionViewTagStyleLayoutSectionAttributes *obj =
     UICollectionViewTagStyleLayoutSectionAttributes.new;
     obj.header = header;
     obj.items  = items;
     obj.footer = footer;
+    obj.decoration = decoration;
     return obj;
 }
 - (id)copyWithZone:(NSZone *)zone
@@ -38,6 +44,7 @@
     obj.header = self.header.copy;
     obj.items  = [[NSArray alloc] initWithArray:self.items copyItems:YES];
     obj.footer = self.footer.copy;
+    obj.decoration = self.decoration.copy;
     return obj;
 }
 @end
@@ -213,8 +220,21 @@
     _itemRenderPolicy        = BLCollectionViewTagLayoutItemRenderDefault;
     _sectionHeadersPinToVisibleBounds = NO;
     _sectionFootersPinToVisibleBounds = NO;
+    _sectionDecorationVisiable        = NO;
     _invalidatedForPinSectionHeaderFootersToVisibleBounds = NO;
     _additionalAdjustedContentInset = UIEdgeInsetsZero;
+}
+- (void)registerNib:(UINib *)nib forDecorationViewOfKind:(NSString *)elementKind
+{
+    NSAssert([elementKind isEqualToString:BLCollectionElementKindSectionDecoration],@"Kind of %@ current unsupported",elementKind);
+    if (![elementKind isEqualToString:BLCollectionElementKindSectionDecoration]) return;
+    [super registerNib:nib forDecorationViewOfKind:elementKind];
+}
+- (void)registerClass:(Class)viewClass forDecorationViewOfKind:(NSString *)elementKind
+{
+    NSAssert([elementKind isEqualToString:BLCollectionElementKindSectionDecoration],@"Kind of %@ current unsupported",elementKind);
+    if (![elementKind isEqualToString:BLCollectionElementKindSectionDecoration]) return;
+    [super registerClass:viewClass forDecorationViewOfKind:elementKind];
 }
 - (void)invalidateLayoutWithContext:(UICollectionViewLayoutInvalidationContext *)context
 {
@@ -285,6 +305,12 @@
     _sectionFootersPinToVisibleBounds = sectionFootersPinToVisibleBounds;
     [self invalidateLayout];
 }
+- (void)setSectionDecorationVisiable:(BOOL)sectionDecorationVisiable
+{
+    if (_sectionDecorationVisiable == sectionDecorationVisiable) return;
+    _sectionDecorationVisiable = sectionDecorationVisiable;
+    [self invalidateLayout];
+}
 #pragma mark -
 - (id<BLCollectionViewDelegateTagStyleLayout>)delegate
 {
@@ -310,6 +336,11 @@
         }
         if (CGRectIntersectsRect(rect, obj.footer.frame) && obj.footer.frame.size.height > 0) {
             [layoutAttributes addObject:obj.footer];
+        }
+        if (self.sectionDecorationVisiable) {
+            if (CGRectIntersectsRect(rect, obj.decoration.frame) && obj.decoration.frame.size.height > 0) {
+                [layoutAttributes addObject:obj.decoration];
+            }
         }
     }
     return layoutAttributes.copy;
@@ -409,7 +440,13 @@
         attributesForFooter.frame = CGRectMake(0, maxY, maxContentWidth, footerReferenceSize.height);
         attributesForFooter.zIndex = self.zIndexForHeaderFooter;
         
-        [self.originSectionAttributes addObject:[UICollectionViewTagStyleLayoutSectionAttributes layoutAttributesWithHeader:attributesForHeader items:sortedAttributesForItems footer:attributesForFooter]];
+        //section decoration
+        UICollectionViewLayoutAttributes *attrubuteForDecoration = [UICollectionViewLayoutAttributes layoutAttributesForDecorationViewOfKind:BLCollectionElementKindSectionDecoration withIndexPath:indexPathForHeaderFooter];
+        attrubuteForDecoration.frame = CGRectMake(-sectionInset.left, CGRectGetMinY(attributesForHeader.frame), maxContentWidth + sectionInset.left + sectionInset.right, CGRectGetMaxY(attributesForFooter.frame) - CGRectGetMinY(attributesForHeader.frame));
+        attrubuteForDecoration.zIndex = -self.zIndexForHeaderFooter;
+        
+        //
+        [self.originSectionAttributes addObject:[UICollectionViewTagStyleLayoutSectionAttributes layoutAttributesWithHeader:attributesForHeader items:sortedAttributesForItems footer:attributesForFooter decoration:attrubuteForDecoration]];
         
         maxY = CGRectGetMaxY(attributesForFooter.frame);
     }
@@ -436,12 +473,12 @@
     visibleRectForPinHeaderFooter.origin.y += topOffset;
     visibleRectForPinHeaderFooter.size.height -= topOffset;
     visibleRectForPinHeaderFooter.size.height -= bottomOffset;
-    // copy items
-    self.sectionAttributes = [[NSMutableArray alloc] initWithArray:self.originSectionAttributes copyItems:YES];
     if (self.collectionViewContentSize.height <= CGRectGetHeight(visibleRectForPinHeaderFooter)) {
         //does no need to pin header or footer to visible bounds any more.
         return;
     }
+    // copy items
+    self.sectionAttributes = [[NSMutableArray alloc] initWithArray:self.originSectionAttributes copyItems:YES];
     NSArray<UICollectionViewLayoutAttributes *> *attributes = [self layoutAttributesForElementsInRect:visibleRectForPinHeaderFooter sectionAttributes:self.originSectionAttributes];
     if (sectionHeadersShouldPinToVisibleBounds) {
         UICollectionViewLayoutAttributes *header =
@@ -539,7 +576,13 @@
 }
 - (UICollectionViewLayoutAttributes *)layoutAttributesForDecorationViewOfKind:(NSString*)elementKind atIndexPath:(NSIndexPath *)indexPath
 {
-    return [super layoutAttributesForDecorationViewOfKind:elementKind atIndexPath:indexPath];
+    if (indexPath.section >= self.sectionAttributes.count) return nil;
+    UICollectionViewTagStyleLayoutSectionAttributes *sectionAttributes = self.sectionAttributes[indexPath.section];
+    if (elementKind == BLCollectionElementKindSectionDecoration) {
+        return sectionAttributes.decoration;
+    }else{
+        return [super layoutAttributesForDecorationViewOfKind:elementKind atIndexPath:indexPath];
+    }
 }
 #pragma mark -
 - (UICollectionViewLayoutInvalidationContext *)invalidationContextForBoundsChange:(CGRect)newBounds
@@ -615,6 +658,7 @@
 @property (nonatomic) IBInspectable CGSize    footerSize;
 @property (nonatomic) IBInspectable BOOL      pinHeaders;
 @property (nonatomic) IBInspectable BOOL      pinFooters;
+@property (nonatomic) IBInspectable BOOL      useDecoration;
 @end
 
 @implementation BLCollectionViewTagLayout (IBDESIGNABLE)
@@ -713,6 +757,14 @@
 - (BOOL)pinFooters
 {
     return self.sectionFootersPinToVisibleBounds;
+}
+- (void)setUseDecoration:(BOOL)useDecoration
+{
+    self.sectionDecorationVisiable = useDecoration;
+}
+- (BOOL)useDecoration
+{
+    return self.sectionDecorationVisiable;;
 }
 - (void)setRenderType:(NSInteger)renderType
 {

@@ -75,6 +75,39 @@
 }
 @end
 
+@interface BLDecorationView : UICollectionReusableView
+@end
+@implementation BLDecorationView
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.backgroundColor = UIColor.blueColor;
+        self.layer.cornerRadius = 5;
+        self.clipsToBounds = YES;
+        UIButton *obj = UIButton.new;
+        [self addSubview:obj];
+        obj.translatesAutoresizingMaskIntoConstraints = NO;
+        [obj.centerXAnchor constraintEqualToAnchor:self.centerXAnchor].active = YES;
+        [obj.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
+        [obj.widthAnchor constraintEqualToAnchor:self.widthAnchor].active = YES;
+        [obj.heightAnchor constraintEqualToAnchor:self.heightAnchor].active = YES;
+        [obj addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return self;
+}
+- (void)buttonClicked:(UIButton *)sender
+{
+    sender.backgroundColor = [UIColor colorWithHue:0.5 saturation:0.5 brightness:arc4random()%256/255.f alpha:1];
+}
+- (void)applyLayoutAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes
+{
+    [super applyLayoutAttributes:layoutAttributes];
+    self.backgroundColor = layoutAttributes.indexPath.section % 2 ? UIColor.redColor : UIColor.blueColor;
+    self.layer.zPosition = -1;
+}
+@end
+
 @interface BLViewController ()<BLCollectionViewDelegateTagStyleLayout>
 @property (nonatomic,strong) NSArray<NSString *>  *alphabetArray;
 @property (nonatomic,strong) NSMutableArray<NSMutableArray *> *dataSource;
@@ -89,7 +122,7 @@
     
     self.collectionView.contentInset = UIEdgeInsetsMake(44, 44, 44, 44);
 //    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(14, 0, 14, 0);
-    
+    [self.blCollectionViewLayout registerClass:BLDecorationView.class forDecorationViewOfKind:BLCollectionElementKindSectionDecoration];
     [self.blCollectionViewLayout
      autoConfigSystemAdditionalAdjustedContentInsetWith:UIApplication.sharedApplication.statusBarFrame
                                           navigationBar:self.navigationController.navigationBar
@@ -140,6 +173,7 @@
         ];
         item.rightBarButtonItems =
         @[
+            [[UIBarButtonItem alloc] initWithTitle:@"Decoration" style:UIBarButtonItemStyleDone target:self action:@selector(showDecoration:)],
             [[UIBarButtonItem alloc] initWithTitle:@"UnPin" style:UIBarButtonItemStyleDone target:self action:@selector(unPin:)],
             [[UIBarButtonItem alloc] initWithTitle:@"Pin" style:UIBarButtonItemStyleDone target:self action:@selector(pin:)]
         ];
@@ -200,6 +234,16 @@
     self.blCollectionViewLayout.sectionHeadersPinToVisibleBounds = NO;
     self.blCollectionViewLayout.sectionFootersPinToVisibleBounds = NO;
 }
+- (IBAction)showDecoration:(UIBarButtonItem *)sender
+{
+    self.blCollectionViewLayout.sectionDecorationVisiable =
+    !self.blCollectionViewLayout.sectionDecorationVisiable;
+    if (self.blCollectionViewLayout.sectionDecorationVisiable) {
+        sender.title = @"Decoration";
+    }else{
+        sender.title = @"No Decoration";
+    }
+}
 - (IBAction)add:(UIBarButtonItem *)sender
 {
     if (arc4random() % 2) {
@@ -242,6 +286,9 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionReusableView *view = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:kind forIndexPath:indexPath];
+    if (kind == BLCollectionElementKindSectionDecoration) {
+        return view;
+    }
     UILabel *label = view.subviews.firstObject;
     if (!label) {
         label = UILabel.new;

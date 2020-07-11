@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VsR-TD-99f">
-    <device id="retina3_5" orientation="portrait" appearance="light"/>
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -12,7 +12,7 @@
             <objects>
                 <collectionViewController id="Svu-6j-u4A" customClass="BLViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="0tE-vU-DvN">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <collectionViewLayout key="collectionViewLayout" id="VmD-ZO-9JT" customClass="BLCollectionViewTagLayout">
@@ -49,6 +49,7 @@
                                 <userDefinedRuntimeAttribute type="number" keyPath="sectionHeight">
                                     <real key="value" value="1000"/>
                                 </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="useDecoration" value="YES"/>
                             </userDefinedRuntimeAttributes>
                         </collectionViewLayout>
                         <cells>
@@ -112,6 +113,11 @@
                                     <action selector="pin:" destination="Svu-6j-u4A" id="zOz-KK-3fB"/>
                                 </connections>
                             </barButtonItem>
+                            <barButtonItem title="Decoration" style="done" id="dPe-9n-0RB">
+                                <connections>
+                                    <action selector="showDecoration:" destination="Svu-6j-u4A" id="umc-i9-U4N"/>
+                                </connections>
+                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                 </collectionViewController>
@@ -126,7 +132,7 @@
                     <tabBarItem key="tabBarItem" title="Title and Prompt" image="1.square" catalog="system" id="QiU-m8-9vh"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="jIV-2O-4yO">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -163,7 +169,7 @@
             <objects>
                 <collectionViewController id="AHd-7e-9t4" customClass="BLViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="9mf-dS-Nqj">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <collectionViewLayout key="collectionViewLayout" id="p1G-yg-PaE" customClass="BLCollectionViewTagLayout">
@@ -260,6 +266,11 @@
                                     <action selector="pin:" destination="AHd-7e-9t4" id="3ty-9H-jbs"/>
                                 </connections>
                             </barButtonItem>
+                            <barButtonItem title="Decoration" style="done" id="9x9-LH-dF3">
+                                <connections>
+                                    <action selector="showDecoration:" destination="Svu-6j-u4A" id="nlN-nD-f3B"/>
+                                </connections>
+                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                 </collectionViewController>
@@ -274,7 +285,7 @@
                     <tabBarItem key="tabBarItem" title="Title" image="2.square" catalog="system" id="2cl-Qy-v5G"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="OvA-6W-Np1">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -291,7 +302,7 @@
             <objects>
                 <collectionViewController id="vtw-MI-D7U" customClass="BLViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="VNk-tM-1Aj">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <collectionViewLayout key="collectionViewLayout" id="HbD-2O-gVX" customClass="BLCollectionViewTagLayout">

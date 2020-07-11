@@ -16,6 +16,8 @@ typedef NS_ENUM (NSUInteger, BLCollectionViewTagLayoutItemRenderPolicy) {
     BLCollectionViewTagLayoutItemRenderCustom        = 3,//place item use custom algorithm
 };
 
+UIKIT_EXTERN NSString *const BLCollectionElementKindSectionDecoration;
+
 #pragma mark - UICollectionViewTagStyleLayout
 #pragma mark -
 IB_DESIGNABLE NS_CLASS_AVAILABLE_IOS(8_0)
@@ -24,58 +26,62 @@ IB_DESIGNABLE NS_CLASS_AVAILABLE_IOS(8_0)
  * The default size value is (50.0, 50.0).
  */
 @property (nonatomic) IBInspectable CGSize itemSize;
-/*
+/**
  * The default value of this property is 10.0.
  */
 @property (nonatomic) CGFloat minimumLineSpacing;
-/*
+/**
  * The default value of this property is 10.0.
  */
 @property (nonatomic) CGFloat minimumInteritemSpacing;
-/*
+/**
  * The default size values are (0, 0).
  */
 @property (nonatomic) CGSize headerReferenceSize;
-/*
+/**
  * The default size values are (0, 0).
  */
 @property (nonatomic) CGSize footerReferenceSize;
-/*
+/**
  * The default edge insets are all set to 0.
  *
- * It does not affect header footer，but for section items similar as UICollectionViewFlowLayout.
+ * It does not affect header footer，but for section items. Similar as UICollectionViewFlowLayout.
  */
 @property (nonatomic) UIEdgeInsets sectionInset;
-/*
-* The default value is CGFLOAT_MAX
-*
-* You can specify the value for section items height limitation.
-*
-* Note : This value is the height of the section elements,except the header footer and section inset.
-*/
+/**
+ * The default value is CGFLOAT_MAX
+ *
+ * You can specify the value for section items height limitation.
+ *
+ * Note : This value is the height of the section elements,except the header footer and section inset.
+ */
 @property (nonatomic) CGFloat  maximumSectionHeight;
-/*
+/**
  * The default is UICollectionViewScrollDirectionVertical.
  *
  * Note: UICollectionViewScrollDirectionHorizontal is unimplemented.
  */
 @property (nonatomic) UICollectionViewScrollDirection scrollDirection;
-/*
+/**
  * The default is BLCollectionViewTagLayoutItemRenderDefault.
  */
 @property (nonatomic) BLCollectionViewTagLayoutItemRenderPolicy itemRenderPolicy;
-/*
+/**
  * The default value of this property is NO.
  */
 @property (nonatomic) BOOL sectionHeadersPinToVisibleBounds;
-/*
+/**
  * The default value of this property is NO.
  */
 @property (nonatomic) BOOL sectionFootersPinToVisibleBounds;
+/**
+ * The default value of this property is NO.
+ */
+@property (nonatomic) BOOL sectionDecorationVisiable;
 @end
 
 @interface BLCollectionViewTagLayout (UICollectionViewContentInsetAdjustment)
-/*
+/**
  * Additional adjusted contentInset by system
  *
  * As usual, you don't need to care about this,the layout will fill in it automatically.
@@ -92,7 +98,7 @@ IB_DESIGNABLE NS_CLASS_AVAILABLE_IOS(8_0)
  */
 @property (nonatomic,assign) UIEdgeInsets  systemAdditionalAdjustedContentInset;
 
-/*
+/**
  * Automatically systemAdditionalAdjustedContentInset configuration
  * by frame and translucent of UINavigationBar and UITabBar (and status bar)
  *
