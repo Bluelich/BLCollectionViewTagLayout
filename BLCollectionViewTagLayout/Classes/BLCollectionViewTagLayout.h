@@ -18,6 +18,23 @@ typedef NS_ENUM (NSUInteger, BLCollectionViewTagLayoutItemRenderPolicy) {
 
 UIKIT_EXTERN NSString *const BLCollectionElementKindSectionDecoration;
 
+typedef NS_ENUM(NSUInteger, BLCollectionViewTagLayoutAnimationState) {
+    BLCollectionViewTagLayoutAnimationStateInitial,
+    BLCollectionViewTagLayoutAnimationStateFinal,
+};
+
+
+/**
+ * Animation configuration for elemets appearing or disappearing
+ *
+ * @param indexPath NSIndexPath
+ * @param kind      kind of the element, or nil if the catrgory is cell
+ * @param catrgory  UICollectionElementCategory
+ */
+typedef
+UICollectionViewLayoutAttributes * _Nullable(^BLCollectionViewTagLayoutAnimation)
+(NSIndexPath *indexPath,NSString * _Nullable kind,UICollectionElementCategory catrgory);
+
 #pragma mark - UICollectionViewTagStyleLayout
 #pragma mark -
 IB_DESIGNABLE NS_CLASS_AVAILABLE_IOS(8_0)
@@ -78,6 +95,14 @@ IB_DESIGNABLE NS_CLASS_AVAILABLE_IOS(8_0)
  * The default value of this property is NO.
  */
 @property (nonatomic) BOOL sectionDecorationVisiable;
+/**
+ * Animation attributes for elements (item|supplementary|decoration) appearing.
+ */
+@property (nonatomic,copy,nullable) BLCollectionViewTagLayoutAnimation elementAppearingAnimationFromValue;
+/**
+ * Animation attributes for elements (item|supplementary|decoration) disappearing.
+ */
+@property (nonatomic,copy,nullable) BLCollectionViewTagLayoutAnimation elementDisappearingAnimationToValue;
 @end
 
 @interface BLCollectionViewTagLayout (UICollectionViewContentInsetAdjustment)

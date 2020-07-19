@@ -831,39 +831,57 @@ NSString *const BLCollectionElementKindSectionDecoration = @"BLCollectionElement
  */
 - (UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingItemAtIndexPath:(NSIndexPath *)itemIndexPath
 {
-    UICollectionViewLayoutAttributes *attributes = [self layoutAttributesForItemAtIndexPath:itemIndexPath].copy;
-    attributes.alpha = 0.1;
-    return attributes;
+    if (self.elementAppearingAnimationFromValue) {
+        self.elementAppearingAnimationFromValue(itemIndexPath,
+                                                nil,
+                                                UICollectionElementCategoryCell);
+    }
+    return [super initialLayoutAttributesForAppearingItemAtIndexPath:itemIndexPath];
 }
 - (UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingItemAtIndexPath:(NSIndexPath *)itemIndexPath
 {
-    UICollectionViewLayoutAttributes *attributes = [self layoutAttributesForItemAtIndexPath:itemIndexPath].copy;
-    attributes.alpha = 0.1;
-    return attributes;
+    if (self.elementDisappearingAnimationToValue) {
+        self.elementDisappearingAnimationToValue(itemIndexPath,
+                                                 nil,
+                                                 UICollectionElementCategoryCell);
+    }
+    return [super finalLayoutAttributesForDisappearingItemAtIndexPath:itemIndexPath];
 }
 - (UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingSupplementaryElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)elementIndexPath
 {
-    UICollectionViewLayoutAttributes *attributes = [self layoutAttributesForSupplementaryViewOfKind:elementKind atIndexPath:elementIndexPath].copy;
-    attributes.alpha = 0.1;
-    return attributes;
+    if (self.elementAppearingAnimationFromValue) {
+        self.elementAppearingAnimationFromValue(elementIndexPath,
+                                                elementKind,
+                                                UICollectionElementCategorySupplementaryView);
+    }
+    return [super initialLayoutAttributesForAppearingSupplementaryElementOfKind:elementKind atIndexPath:elementIndexPath];
 }
 - (nullable UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingSupplementaryElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)elementIndexPath
 {
-    UICollectionViewLayoutAttributes *attributes = [self layoutAttributesForSupplementaryViewOfKind:elementKind atIndexPath:elementIndexPath].copy;
-    attributes.alpha = 0.1;
-    return attributes;
+    if (self.elementDisappearingAnimationToValue) {
+        self.elementDisappearingAnimationToValue(elementIndexPath,
+                                                 elementKind,
+                                                 UICollectionElementCategorySupplementaryView);
+    }
+    return [super finalLayoutAttributesForDisappearingSupplementaryElementOfKind:elementKind atIndexPath:elementIndexPath];
 }
 - (nullable UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingDecorationElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)decorationIndexPath
 {
-    UICollectionViewLayoutAttributes *attributes = [self layoutAttributesForDecorationViewOfKind:elementKind atIndexPath:decorationIndexPath].copy;
-    attributes.alpha = 0.1;
-    return attributes;
+    if (self.elementAppearingAnimationFromValue) {
+        self.elementAppearingAnimationFromValue(decorationIndexPath,
+                                                elementKind,
+                                                UICollectionElementCategoryDecorationView);
+    }
+    return [super initialLayoutAttributesForAppearingDecorationElementOfKind:elementKind atIndexPath:decorationIndexPath];
 }
 - (nullable UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingDecorationElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)decorationIndexPath
 {
-    UICollectionViewLayoutAttributes *attributes = [self layoutAttributesForDecorationViewOfKind:elementKind atIndexPath:decorationIndexPath].copy;
-    attributes.alpha = 0.1;
-    return attributes;
+    if (self.elementDisappearingAnimationToValue) {
+        self.elementDisappearingAnimationToValue(decorationIndexPath,
+                                                 elementKind,
+                                                 UICollectionElementCategoryDecorationView);
+    }
+    return [super finalLayoutAttributesForDisappearingDecorationElementOfKind:elementKind atIndexPath:decorationIndexPath];
 }
 
 
