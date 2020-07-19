@@ -832,54 +832,52 @@ NSString *const BLCollectionElementKindSectionDecoration = @"BLCollectionElement
 - (UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingItemAtIndexPath:(NSIndexPath *)itemIndexPath
 {
     if (self.elementAppearingAnimationFromValue) {
-        self.elementAppearingAnimationFromValue(itemIndexPath,
-                                                nil,
-                                                UICollectionElementCategoryCell);
+        return self.elementAppearingAnimationFromValue(
+        [self layoutAttributesForItemAtIndexPath:itemIndexPath].copy);
     }
     return [super initialLayoutAttributesForAppearingItemAtIndexPath:itemIndexPath];
 }
 - (UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingItemAtIndexPath:(NSIndexPath *)itemIndexPath
 {
     if (self.elementDisappearingAnimationToValue) {
-        self.elementDisappearingAnimationToValue(itemIndexPath,
-                                                 nil,
-                                                 UICollectionElementCategoryCell);
+        return self.elementDisappearingAnimationToValue(
+        [self layoutAttributesForItemAtIndexPath:itemIndexPath].copy);
     }
     return [super finalLayoutAttributesForDisappearingItemAtIndexPath:itemIndexPath];
 }
 - (UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingSupplementaryElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)elementIndexPath
 {
     if (self.elementAppearingAnimationFromValue) {
-        self.elementAppearingAnimationFromValue(elementIndexPath,
-                                                elementKind,
-                                                UICollectionElementCategorySupplementaryView);
+        return self.elementAppearingAnimationFromValue(
+        [self layoutAttributesForSupplementaryViewOfKind:elementKind
+                                             atIndexPath:elementIndexPath].copy);
     }
     return [super initialLayoutAttributesForAppearingSupplementaryElementOfKind:elementKind atIndexPath:elementIndexPath];
 }
 - (nullable UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingSupplementaryElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)elementIndexPath
 {
     if (self.elementDisappearingAnimationToValue) {
-        self.elementDisappearingAnimationToValue(elementIndexPath,
-                                                 elementKind,
-                                                 UICollectionElementCategorySupplementaryView);
+        return self.elementDisappearingAnimationToValue(
+        [self layoutAttributesForSupplementaryViewOfKind:elementKind
+                                             atIndexPath:elementIndexPath].copy);
     }
     return [super finalLayoutAttributesForDisappearingSupplementaryElementOfKind:elementKind atIndexPath:elementIndexPath];
 }
 - (nullable UICollectionViewLayoutAttributes *)initialLayoutAttributesForAppearingDecorationElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)decorationIndexPath
 {
     if (self.elementAppearingAnimationFromValue) {
-        self.elementAppearingAnimationFromValue(decorationIndexPath,
-                                                elementKind,
-                                                UICollectionElementCategoryDecorationView);
+        return self.elementAppearingAnimationFromValue(
+        [self layoutAttributesForDecorationViewOfKind:elementKind
+                                          atIndexPath:decorationIndexPath].copy);
     }
     return [super initialLayoutAttributesForAppearingDecorationElementOfKind:elementKind atIndexPath:decorationIndexPath];
 }
 - (nullable UICollectionViewLayoutAttributes *)finalLayoutAttributesForDisappearingDecorationElementOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)decorationIndexPath
 {
     if (self.elementDisappearingAnimationToValue) {
-        self.elementDisappearingAnimationToValue(decorationIndexPath,
-                                                 elementKind,
-                                                 UICollectionElementCategoryDecorationView);
+        return self.elementDisappearingAnimationToValue(
+        [self layoutAttributesForDecorationViewOfKind:elementKind
+                                          atIndexPath:decorationIndexPath].copy);
     }
     return [super finalLayoutAttributesForDisappearingDecorationElementOfKind:elementKind atIndexPath:decorationIndexPath];
 }

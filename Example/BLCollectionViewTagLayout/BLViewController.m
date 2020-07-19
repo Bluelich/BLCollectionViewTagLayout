@@ -120,23 +120,17 @@
     [super viewDidLoad];
     self.clearsSelectionOnViewWillAppear = NO;
     
+    [self updateCollectionViewLayoutConfiguration];
+    
     self.collectionView.contentInset = UIEdgeInsetsMake(44, 44, 44, 44);
 //    self.collectionView.scrollIndicatorInsets = UIEdgeInsetsMake(14, 0, 14, 0);
-    [self.blCollectionViewLayout registerClass:BLDecorationView.class forDecorationViewOfKind:BLCollectionElementKindSectionDecoration];
-    [self.blCollectionViewLayout
-     autoConfigSystemAdditionalAdjustedContentInsetWith:UIApplication.sharedApplication.statusBarFrame
-                                          navigationBar:self.navigationController.navigationBar
-                                                 tabbar:self.tabBarController.tabBar];
-    
     [self.collectionView registerClass:UICollectionReusableView.class
             forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:UICollectionElementKindSectionHeader];
     [self.collectionView registerClass:UICollectionReusableView.class
             forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:UICollectionElementKindSectionFooter];
     NSMutableArray *array = @[].mutableCopy;
     for (unichar var = 'A'; var <= 'Z'; var++) {
-        NSString *text =
-        [NSString stringWithCharacters:&var length:1];
-        [array addObject:text];
+        [array addObject:[NSString stringWithCharacters:&var length:1]];
     }
     self.alphabetArray = array.copy;
     self.dataSource = @[self.alphabetArray.mutableCopy].mutableCopy;
@@ -145,45 +139,44 @@
     [self add:nil];
     [self add:nil];
     [self add:nil];
+    if (!self.navigationController) {
+        self.navigationBar.hidden = NO;
+    }
 }
-- (void)viewWillAppear:(BOOL)animated
+- (void)updateCollectionViewLayoutConfiguration
 {
-    [super viewWillAppear:animated];
-    if (self.navigationController) return;
-    self.navigationBar.hidden = NO;
+    self.blCollectionViewLayout.elementAppearingAnimationFromValue =
+    ^UICollectionViewLayoutAttributes * _Nullable(UICollectionViewLayoutAttributes * _Nullable originalLayoutAttributes) {
+        originalLayoutAttributes.alpha = 0.1;
+        return originalLayoutAttributes;
+    };
+    self.blCollectionViewLayout.elementDisappearingAnimationToValue =
+    ^UICollectionViewLayoutAttributes * _Nullable(UICollectionViewLayoutAttributes * _Nullable originalLayoutAttributes) {
+        originalLayoutAttributes.alpha = 0.1;
+        return originalLayoutAttributes;
+    };
+    [self.blCollectionViewLayout registerClass:BLDecorationView.class forDecorationViewOfKind:BLCollectionElementKindSectionDecoration];
+    [self.blCollectionViewLayout
+     autoConfigSystemAdditionalAdjustedContentInsetWith:UIApplication.sharedApplication.statusBarFrame
+                                          navigationBar:self.navigationController.navigationBar
+                                                 tabbar:self.tabBarController.tabBar];
 }
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    if (self.navigationController) return;
-    self.navigationBar.hidden = YES;
-}
-
 - (UINavigationBar *)navigationBar
 {
-    if (self.navigationController) return nil;
     if (!_navigationBar) {
         UINavigationItem *item = UINavigationItem.new;
-        item.title = @"Fake NavigationBar";
         item.leftBarButtonItems =
         @[
             [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(add:)],
-            [[UIBarButtonItem alloc] initWithTitle:@"  - " style:UIBarButtonItemStyleDone target:self action:@selector(delete:)],
+            [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(add:)],
             [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)]
         ];
         item.rightBarButtonItems =
         @[
-            [[UIBarButtonItem alloc] initWithTitle:@"Decoration" style:UIBarButtonItemStyleDone target:self action:@selector(showDecoration:)],
-            [[UIBarButtonItem alloc] initWithTitle:@"UnPin" style:UIBarButtonItemStyleDone target:self action:@selector(unPin:)],
-            [[UIBarButtonItem alloc] initWithTitle:@"Pin" style:UIBarButtonItemStyleDone target:self action:@selector(pin:)]
+            [[UIBarButtonItem alloc] initWithTitle:@"Pin" style:UIBarButtonItemStylePlain target:self action:@selector(pin:)],
+            [[UIBarButtonItem alloc] initWithTitle:@"Decoration" style:UIBarButtonItemStylePlain target:self action:@selector(decoration:)]
         ];
-        [item.leftBarButtonItems enumerateObjectsUsingBlock:^(UIBarButtonItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            obj.style = UIBarButtonItemStyleDone;
-        }];
-        [item.rightBarButtonItems enumerateObjectsUsingBlock:^(UIBarButtonItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            obj.style = UIBarButtonItemStyleDone;
-        }];
-        item.prompt = @"Prompt";
+        item.prompt = @"Fake NavigationBar";
         _navigationBar = UINavigationBar.new;
         _navigationBar.translucent = YES;
         _navigationBar.backgroundColor = UIColor.clearColor;
@@ -226,15 +219,17 @@
 }
 - (IBAction)pin:(UIBarButtonItem *)sender
 {
-    self.blCollectionViewLayout.sectionHeadersPinToVisibleBounds = YES;
-    self.blCollectionViewLayout.sectionFootersPinToVisibleBounds = YES;
+    self.blCollectionViewLayout.sectionHeadersPinToVisibleBounds =
+    !self.blCollectionViewLayout.sectionHeadersPinToVisibleBounds;
+    self.blCollectionViewLayout.sectionFootersPinToVisibleBounds =
+    !self.blCollectionViewLayout.sectionFootersPinToVisibleBounds;
+    if (self.blCollectionViewLayout.sectionHeadersPinToVisibleBounds) {
+        sender.title = @"Pined";
+    }else{
+        sender.title = @"UnPined";
+    }
 }
-- (IBAction)unPin:(UIBarButtonItem *)sender
-{
-    self.blCollectionViewLayout.sectionHeadersPinToVisibleBounds = NO;
-    self.blCollectionViewLayout.sectionFootersPinToVisibleBounds = NO;
-}
-- (IBAction)showDecoration:(UIBarButtonItem *)sender
+- (IBAction)decoration:(UIBarButtonItem *)sender
 {
     self.blCollectionViewLayout.sectionDecorationVisiable =
     !self.blCollectionViewLayout.sectionDecorationVisiable;
@@ -310,15 +305,17 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-    [collectionView performBatchUpdates:^{
-        if (self.dataSource[indexPath.section].count == 1) {
-            [self.dataSource removeObjectAtIndex:indexPath.section];
-            [collectionView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section]];
-        }else{
-            [self.dataSource[indexPath.section] removeObjectAtIndex:indexPath.item];
-            [collectionView deleteItemsAtIndexPaths:@[indexPath]];
-        }
-    } completion:nil];
+    [UIView animateWithDuration:2 animations:^{
+        [collectionView performBatchUpdates:^{
+            if (self.dataSource[indexPath.section].count == 1) {
+                [self.dataSource removeObjectAtIndex:indexPath.section];
+                [collectionView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section]];
+            }else{
+                [self.dataSource[indexPath.section] removeObjectAtIndex:indexPath.item];
+                [collectionView deleteItemsAtIndexPaths:@[indexPath]];
+            }
+        } completion:nil];
+    }];
 }
 #pragma mark -
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(BLCollectionViewTagLayout *)collectionViewLayout maximumHeightForSection:(NSInteger)section

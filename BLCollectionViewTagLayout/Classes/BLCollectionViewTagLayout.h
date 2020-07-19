@@ -27,13 +27,11 @@ typedef NS_ENUM(NSUInteger, BLCollectionViewTagLayoutAnimationState) {
 /**
  * Animation configuration for elemets appearing or disappearing
  *
- * @param indexPath NSIndexPath
- * @param kind      kind of the element, or nil if the catrgory is cell
- * @param catrgory  UICollectionElementCategory
+ * @param originalLayoutAttributes original UICollectionViewLayoutAttributes
  */
 typedef
 UICollectionViewLayoutAttributes * _Nullable(^BLCollectionViewTagLayoutAnimation)
-(NSIndexPath *indexPath,NSString * _Nullable kind,UICollectionElementCategory catrgory);
+(UICollectionViewLayoutAttributes * _Nullable originalLayoutAttributes);
 
 #pragma mark - UICollectionViewTagStyleLayout
 #pragma mark -

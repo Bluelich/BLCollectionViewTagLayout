@@ -7,7 +7,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Title-->
+        <!--View Controller-->
         <scene sceneID="cog-Wt-WEy">
             <objects>
                 <collectionViewController id="Svu-6j-u4A" customClass="BLViewController" sceneMemberID="viewController">
@@ -83,39 +83,34 @@
                             <outlet property="delegate" destination="Svu-6j-u4A" id="l7N-vb-PuP"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="Title" prompt="Prompt" id="gJ6-Qm-6rx">
+                    <navigationItem key="navigationItem" prompt="Title and Prompt" id="gJ6-Qm-6rx">
                         <barButtonItem key="backBarButtonItem" title="Back" id="uAH-CT-Med"/>
                         <leftBarButtonItems>
-                            <barButtonItem style="done" systemItem="add" id="Rxw-Qe-0Tc">
+                            <barButtonItem style="plain" systemItem="add" id="Rxw-Qe-0Tc">
                                 <connections>
                                     <action selector="add:" destination="Svu-6j-u4A" id="Rdb-f6-9k9"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="  - " style="done" id="M9O-jn-dIT">
+                            <barButtonItem style="plain" systemItem="trash" id="M9O-jn-dIT">
                                 <connections>
                                     <action selector="delete:" destination="Svu-6j-u4A" id="3pc-SL-bdM"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem style="done" systemItem="refresh" id="Kw8-aZ-3lW">
+                            <barButtonItem style="plain" systemItem="refresh" id="Kw8-aZ-3lW">
                                 <connections>
                                     <action selector="refresh:" destination="Svu-6j-u4A" id="vha-V9-6Jz"/>
                                 </connections>
                             </barButtonItem>
                         </leftBarButtonItems>
                         <rightBarButtonItems>
-                            <barButtonItem title="UnPin" style="done" id="xmZ-cR-fJs">
-                                <connections>
-                                    <action selector="unPin:" destination="Svu-6j-u4A" id="sA6-yj-Bpf"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title="Pin" style="done" id="AXX-PZ-KD6">
+                            <barButtonItem title="Pin" style="plain" id="AXX-PZ-KD6">
                                 <connections>
                                     <action selector="pin:" destination="Svu-6j-u4A" id="zOz-KK-3fB"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Decoration" style="done" id="dPe-9n-0RB">
+                            <barButtonItem title="Decoration" style="plain" id="dPe-9n-0RB">
                                 <connections>
-                                    <action selector="showDecoration:" destination="Svu-6j-u4A" id="umc-i9-U4N"/>
+                                    <action selector="decoration:" destination="Svu-6j-u4A" id="Fw4-xw-Y6G"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -239,36 +234,31 @@
                     <navigationItem key="navigationItem" title="Title" id="AvN-EJ-Pj9">
                         <barButtonItem key="backBarButtonItem" title="Back" id="2fe-FI-J2B"/>
                         <leftBarButtonItems>
-                            <barButtonItem style="done" systemItem="add" id="Vq9-AN-Qof">
+                            <barButtonItem style="plain" systemItem="add" id="Vq9-AN-Qof">
                                 <connections>
                                     <action selector="add:" destination="AHd-7e-9t4" id="Ujc-sB-wDZ"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="  - " style="done" id="KQO-yE-KK0">
+                            <barButtonItem style="plain" systemItem="trash" id="KQO-yE-KK0">
                                 <connections>
                                     <action selector="delete:" destination="AHd-7e-9t4" id="0z0-ZU-3IU"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem style="done" systemItem="refresh" id="WuC-rt-yay">
+                            <barButtonItem style="plain" systemItem="refresh" id="WuC-rt-yay">
                                 <connections>
                                     <action selector="refresh:" destination="AHd-7e-9t4" id="Izk-d4-A0g"/>
                                 </connections>
                             </barButtonItem>
                         </leftBarButtonItems>
                         <rightBarButtonItems>
-                            <barButtonItem title="UnPin" style="done" id="nTY-MX-fgg">
-                                <connections>
-                                    <action selector="unPin:" destination="AHd-7e-9t4" id="YWg-ls-Dsr"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title="Pin" style="done" id="iX7-J4-kut">
+                            <barButtonItem title="Pin" style="plain" id="iX7-J4-kut">
                                 <connections>
                                     <action selector="pin:" destination="AHd-7e-9t4" id="3ty-9H-jbs"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Decoration" style="done" id="9x9-LH-dF3">
+                            <barButtonItem title="Decoration" style="plain" id="9x9-LH-dF3">
                                 <connections>
-                                    <action selector="showDecoration:" destination="Svu-6j-u4A" id="nlN-nD-f3B"/>
+                                    <action selector="decoration:" destination="AHd-7e-9t4" id="4x5-vu-LYB"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
