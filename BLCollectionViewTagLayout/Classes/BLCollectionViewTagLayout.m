@@ -170,6 +170,12 @@ NSString *const BLCollectionElementKindSectionDecoration = @"BLCollectionElement
 @property (nonatomic,strong) NSMutableArray<UICollectionViewTagStyleLayoutSectionAttributes *>  *sectionAttributes;
 @property (nonatomic,strong) NSMutableArray<UICollectionViewTagStyleLayoutSectionAttributes *>  *originSectionAttributes;
 @property (nonatomic,assign) BOOL  invalidatedForPinSectionHeaderFootersToVisibleBounds;
+/**
+ * Custom adjusted contentInset
+ *
+ * Fully control the inset for pin header/footer by yourself.
+ */
+@property (nonatomic,assign) UIEdgeInsets  adjustedContentInset;
 /*
  * Additional adjusted contentInset by system
  */
@@ -309,6 +315,22 @@ NSString *const BLCollectionElementKindSectionDecoration = @"BLCollectionElement
 {
     if (_sectionDecorationVisiable == sectionDecorationVisiable) return;
     _sectionDecorationVisiable = sectionDecorationVisiable;
+    [self invalidateLayout];
+}
+- (void)setAdjustedContentInset:(UIEdgeInsets)adjustedContentInset
+{
+    if (UIEdgeInsetsEqualToEdgeInsets(_adjustedContentInset, adjustedContentInset)) {
+        return;
+    }
+    _adjustedContentInset = adjustedContentInset;
+    [self invalidateLayout];
+}
+- (void)setSystemAdditionalAdjustedContentInset:(UIEdgeInsets)systemAdditionalAdjustedContentInset
+{
+    if (UIEdgeInsetsEqualToEdgeInsets(_systemAdditionalAdjustedContentInset, systemAdditionalAdjustedContentInset)) {
+        return;
+    }
+    _systemAdditionalAdjustedContentInset = systemAdditionalAdjustedContentInset;
     [self invalidateLayout];
 }
 #pragma mark -
@@ -514,8 +536,9 @@ NSString *const BLCollectionElementKindSectionDecoration = @"BLCollectionElement
 - (void)prepareLayout
 {
     [super prepareLayout];
-    
-    if (@available(iOS 11.0, *)) {
+    if (!UIEdgeInsetsEqualToEdgeInsets(UIEdgeInsetsZero, self.adjustedContentInset)) {
+        self.additionalAdjustedContentInset = self.adjustedContentInset;
+    }else if (@available(iOS 11.0, *)) {
         self.additionalAdjustedContentInset = (UIEdgeInsets){
             .top = self.collectionView.adjustedContentInset.top - self.collectionView.contentInset.top,
             .left = 0,

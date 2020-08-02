@@ -105,6 +105,12 @@ IB_DESIGNABLE NS_CLASS_AVAILABLE_IOS(8_0)
 
 @interface BLCollectionViewTagLayout (UICollectionViewContentInsetAdjustment)
 /**
+ * Custom adjusted contentInset
+ *
+ * Fully control the inset for pin header/footer by yourself.
+ */
+@property (nonatomic,assign) UIEdgeInsets  adjustedContentInset;
+/**
  * Additional adjusted contentInset by system
  *
  * As usual, you don't need to care about this,the layout will fill in it automatically.
