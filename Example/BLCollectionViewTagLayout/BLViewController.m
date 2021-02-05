@@ -132,7 +132,7 @@
 }
 @end
 
-@interface BLViewController ()<BLCollectionViewDelegateTagStyleLayout>
+@interface BLViewController ()<BLCollectionViewDelegateTagLayout>
 @property (nonatomic,strong) NSArray<NSString *>  *alphabetArray;
 @property (nonatomic,strong) NSMutableArray<NSMutableArray *> *dataSource;
 @property (nonatomic,strong) UINavigationBar *navigationBar;

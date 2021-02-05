@@ -139,7 +139,7 @@ IB_DESIGNABLE NS_CLASS_AVAILABLE_IOS(8_0)
                                                     tabbar:(UITabBar *)tabbar;
 @end
 
-@protocol BLCollectionViewDelegateTagStyleLayout <UICollectionViewDelegate>
+@protocol BLCollectionViewDelegateTagLayout <UICollectionViewDelegate>
 
 @optional
 
@@ -150,7 +150,7 @@ IB_DESIGNABLE NS_CLASS_AVAILABLE_IOS(8_0)
 - (CGFloat)collectionView:(UICollectionView *)collectionView      layout:(BLCollectionViewTagLayout *)collectionViewLayout maximumHeightForSection:(NSInteger)section;
 - (CGSize)collectionView:(UICollectionView *)collectionView       layout:(BLCollectionViewTagLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section;
 - (CGSize)collectionView:(UICollectionView *)collectionView       layout:(BLCollectionViewTagLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section;
-- (NSArray<UICollectionViewLayoutAttributes *> *)collectionView:(UICollectionView *)collectionView layout:(BLCollectionViewTagLayout *)collectionViewLayout attributesInSection:(NSInteger)section boundingRect:(CGRect )boundingRect;
+- (NSArray<UICollectionViewLayoutAttributes *> *)collectionView:(UICollectionView *)collectionView layout:(BLCollectionViewTagLayout *)collectionViewLayout itemAttributesInSection:(NSInteger)section boundingRect:(CGRect )boundingRect;
 @end
 
 

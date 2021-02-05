@@ -83,6 +83,7 @@ NSString *const BLCollectionElementKindSectionDecoration = @"BLCollectionElement
                         minimumLineSpacing:minimumLineSpacing
                    minimumInteritemSpacing:minimumInteritemSpacing];
         case BLCollectionViewTagLayoutItemRenderCustom:
+            NSAssert(NO, @"You must implement `-[BLCollectionViewDelegateTagLayout collectionView:layout:itemAttributesInSection:boundingRect:]` if you prefer a custom layout item render policy");
             return nil;
     }
 }
@@ -119,10 +120,10 @@ NSString *const BLCollectionElementKindSectionDecoration = @"BLCollectionElement
             if (rightmostItem) {
                 //place the item here
                 itemOrigin = CGPointMake(CGRectGetMaxX(rightmostItem.frame) + minimumInteritemSpacing, CGRectGetMinY(rightmostItem.frame));
-                //update the rightmost item of this line
+                //update the rightmost item of this row
                 [rightmostItems removeObject:rightmostItem];
             }else{
-                //start on a new line
+                //start on a new row
                 itemOrigin = CGPointMake(CGRectGetMinX(boundingRect), CGRectGetMaxY(attributesForItems.lastObject.frame) + minimumLineSpacing);
                 //beyond the max rect of the limit size
                 if (itemOrigin.y + CGRectGetHeight(obj.frame) > CGRectGetMaxY(boundingRect)) {
@@ -139,7 +140,7 @@ NSString *const BLCollectionElementKindSectionDecoration = @"BLCollectionElement
         };
         /*
          Default       ：Only keep the last item alaways
-         ShortestFirst : Keep last items of every lines
+         ShortestFirst : Keep last items of each rows
          */
         if (policy == BLCollectionViewTagLayoutItemRenderDefault) {
             [rightmostItems removeAllObjects];
@@ -191,7 +192,7 @@ NSString *const BLCollectionElementKindSectionDecoration = @"BLCollectionElement
 
 //Convenience values for usage
 @property (nonatomic,assign,readonly) NSInteger  zIndexForHeaderFooter;
-@property (nonatomic,  weak,readonly) id<BLCollectionViewDelegateTagStyleLayout> delegate;
+@property (nonatomic,  weak,readonly) id<BLCollectionViewDelegateTagLayout> delegate;
 
 @end
 
@@ -334,9 +335,9 @@ NSString *const BLCollectionElementKindSectionDecoration = @"BLCollectionElement
     [self invalidateLayout];
 }
 #pragma mark -
-- (id<BLCollectionViewDelegateTagStyleLayout>)delegate
+- (id<BLCollectionViewDelegateTagLayout>)delegate
 {
-    return (id<BLCollectionViewDelegateTagStyleLayout>)self.collectionView.delegate;
+    return (id<BLCollectionViewDelegateTagLayout>)self.collectionView.delegate;
 }
 - (NSInteger)zIndexForHeaderFooter
 {
@@ -427,8 +428,8 @@ NSString *const BLCollectionElementKindSectionDecoration = @"BLCollectionElement
         };
         NSArray<UICollectionViewLayoutAttributes *> *sortedAttributesForItems = nil;
         if (_itemRenderPolicy == BLCollectionViewTagLayoutItemRenderCustom) {
-            NSAssert([self.delegate respondsToSelector:@selector(collectionView:layout:attributesInSection:boundingRect:)], @"You must implement `-[BLCollectionViewDelegateTagStyleLayout collectionView:layout:attributesInSection:boundingRect:]` if you prefer a custom layout item render policy");
-            sortedAttributesForItems = [self.delegate collectionView:self.collectionView layout:self attributesInSection:section boundingRect:boundingRectForItems];
+            NSAssert([self.delegate respondsToSelector:@selector(collectionView:layout:itemAttributesInSection:boundingRect:)], @"You must implement `-[BLCollectionViewDelegateTagLayout collectionView:layout:itemAttributesInSection:boundingRect:]` if you prefer a custom layout item render policy");
+            sortedAttributesForItems = [self.delegate collectionView:self.collectionView layout:self itemAttributesInSection:section boundingRect:boundingRectForItems];
         }else{
             //items
             NSMutableArray<UICollectionViewLayoutAttributes *> *attributesForItems = @[].mutableCopy;
